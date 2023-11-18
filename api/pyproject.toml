@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "massify-api"
+version = "0.1.0"
+description = ""
+authors = ["Bengt Sjögren <Bengan92@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages =  [
+    { include = "app", from = "." },
+]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.104.1"
+uvicorn = {version = "^0.24.0.post1", extras = ["standard"]}
+sqlalchemy = "^2.0.23"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
