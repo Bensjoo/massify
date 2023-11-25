@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import Config
 from app.routes.users import router as users_router
+from app.routes.tastings import tastings_router
+# from app.routes.beers import router as beers_router
 from app import models
 from app.database import engine
 
@@ -40,3 +42,5 @@ async def readyz():
 
 # Routers
 app.include_router(users_router, prefix="/users")
+app.include_router(tastings_router, prefix="/tastings")
+# app.include_router(beers_router, prefix="/beers")
