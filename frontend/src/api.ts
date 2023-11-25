@@ -6,4 +6,10 @@ const api = axios.create({
 
 })
 
+export interface User {
+    id: number;
+    nick_name: string;
+    is_admin: boolean;
+  }
+
 export default api;
