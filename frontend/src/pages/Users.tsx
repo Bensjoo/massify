@@ -1,24 +1,52 @@
-import React, { useState, useEffect } from 'react';
-import UserTable from '../components/UserTable';
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import UserForm from "../components/UserForm";
+import UserTable from "../components/UserTable";
+import api, { User } from "../api";
 
-import api from '../api';
-import { User } from '../api';
+const Users: React.FC = () => {
+    const [users, setUsers] = useState<User[]>([]);
+    const [formData, setFormData] = useState({
+        nick_name: '',
+        is_admin: false,
+    })
 
-const HomePage: React.FC = () => {
-  const [users, setUsers] = useState<User[]>([]);
-  // State and functions for users and tastings
+    const fetchUsers = async () => {
+        const response = await api.get('/users/');
+        setUsers(response.data)
+    }
 
-  useEffect(() => {
-    // Fetch users and tastings
-  }, []);
 
-  // Handlers for form inputs and submissions
+    useEffect(() => {
+        fetchUsers();
+    }, []);
+    
+    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
+        setFormData({
+        ...formData,
+        [event.target.name]: value
+        })
+    }
 
+    const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        await api.post('/users/new', formData);
+        fetchUsers();
+        setFormData({
+        nick_name: '',
+        is_admin: false,
+        })
+    }
   return (
     <div>
-      Welcome to massify!
+        <UserForm 
+        formData={formData} 
+        handleInputChange={handleInputChange} 
+        handleFormSubmit={handleFormSubmit}
+        />
+        <UserTable users={users} />
     </div>
-  );
+    );
 };
 
-export default HomePage;
+export default Users;
