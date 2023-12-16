@@ -14,6 +14,10 @@ const Users: React.FC = () => {
         const response = await api.get('/users/');
         setUsers(response.data)
     }
+    
+    const deleteUser = async (userId: number) => {
+        await api.delete(`/users/${userId}`)
+    }
 
 
     useEffect(() => {
@@ -30,13 +34,20 @@ const Users: React.FC = () => {
 
     const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        await api.post('/users/new', formData);
+        await api.post('/users/new/', formData);
         fetchUsers();
         setFormData({
         nick_name: '',
         is_admin: false,
         })
     }
+
+    const handleDeleteUser = async(userId: number) => {
+        await deleteUser(userId)
+        fetchUsers();
+    }
+
+
   return (
     <div>
         <UserForm 
@@ -44,7 +55,7 @@ const Users: React.FC = () => {
         handleInputChange={handleInputChange} 
         handleFormSubmit={handleFormSubmit}
         />
-        <UserTable users={users} />
+        <UserTable users={users} onDelete={handleDeleteUser}/>
     </div>
     );
 };

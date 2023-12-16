@@ -38,7 +38,7 @@ async def get_users(db: Session = Depends(get_db)):
     return users
 
 
-@router.delete('/delete/')
+@router.delete('/{id}')
 async def delete_by_id(id: int, db: Session = Depends(get_db)):
     db.query(models.User).filter(models.User.id == id).delete()
     db.commit()
