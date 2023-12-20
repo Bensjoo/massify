@@ -12,4 +12,12 @@ export interface User {
     is_admin: boolean;
   }
 
+export interface Beer {
+  id: number;
+  name: string;
+  short_name: string;
+  brewery: string;
+  bolaget_number: number;
+  abv: number;
+}
 export default api;

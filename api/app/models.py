@@ -1,6 +1,6 @@
 from datetime import datetime
 from sqlalchemy import (
-    Column, ForeignKey, Integer, String, Boolean, DateTime,  # Float,
+    Column, ForeignKey, Integer, String, Boolean, DateTime, Float,
     Table,
 )
 from sqlalchemy.orm import relationship
@@ -33,15 +33,15 @@ class User(Base):
     # TODO: password management
 
 
-# class Beer(Base):
-#     __tablename__ = "beers"
+class Beer(Base):
+    __tablename__ = "beers"
 
-#     id = Column(Integer, primary_key=True, index=True)
-#     full_name = Column(String)
-#     short_name = Column(String)
-#     brewery = Column(String)
-#     bolaget_number = Column(Integer)
-#     abv = Column(Float, default=5.2)
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
+    short_name = Column(String)
+    brewery = Column(String)
+    bolaget_number = Column(Integer)
+    abv = Column(Float, default=5.2)
 
 
 class Tasting(Base):

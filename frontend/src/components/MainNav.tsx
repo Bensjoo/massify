@@ -7,9 +7,10 @@ const MainNav: React.FC = () => {
     return (
         <Navbar variant="dark" bg="dark">
         <Container fluid="true">
-          <NavLink className="navbar-brand" href="/">Massify 🍺</NavLink>
+          <NavLink className="navbar-brand" href="/">🍺 Massify</NavLink>
 
-          <NavLink className="navbar-text" href="/users"> Users 🙋</NavLink>
+          <NavLink className="navbar-text" href="/users"> 🙋 Users</NavLink>
+          <NavLink className="navbar-text" href="/beers"> 🍻 Beers</NavLink>
         </Container>
       </Navbar>
     )
