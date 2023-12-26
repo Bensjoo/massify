@@ -1,6 +1,6 @@
 from typing import List
 from pydantic import BaseModel
-from fastapi import APIRouter, Depends  # , File, UploadFile
+from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from sqlalchemy.orm import Session
 
 from app import models
@@ -26,25 +26,39 @@ class BeerModel(BeerBase):
 
 @router.post('/new/', response_model=BeerModel)
 async def create_beer(
-        beer: BeerBase,
-        # thumbnail: UploadFile = File(...),
-        db: Session = Depends(get_db)
-        ):
-    db_beer = models.Beer(**beer.model_dump())
+        name: str = Form(...),
+        short_name: str = Form(...),
+        brewery: str = Form(...),
+        bolaget_number: int = Form(...),
+        abv: float = Form(...),
+        thumbnail: UploadFile = File(...),
+        db: Session = Depends(get_db)):
 
-    # file_location = f"{db_beer.id}.png"
-    # with open(file_location, "wb+") as file:
-    #     try:
-    #         contents = thumbnail.file.read()
-    #         file.write(contents)
-    #     except Exception:
-    #         return {"message": "There was an error uploading the file"}
-    #     finally:
-    #         thumbnail.file.close()
-
+    beer_data = {
+        "name": name,
+        "short_name": short_name,
+        "brewery": brewery,
+        "bolaget_number": bolaget_number,
+        "abv": abv
+    }
+    db_beer = models.Beer(**beer_data)
     db.add(db_beer)
-    db.commit()
-    db.refresh(db_beer)
+
+    try:
+        db.commit()
+        db.refresh(db_beer)
+
+        file_location = f"../thumbnails/{db_beer.id}.png"
+        with open(file_location, "wb+") as file:
+            contents = thumbnail.file.read()
+            file.write(contents)
+    except Exception as e:
+        db.rollback()  # Rollback the transaction if there's an issue
+        print(e)
+        raise HTTPException(
+            status_code=500,
+            detail="Error while saving the beer or uploading the thumbnail."
+        )
     return db_beer
 
 

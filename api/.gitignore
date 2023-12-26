@@ -39,3 +39,4 @@ dev.db*
 # FASTAPI
 demo.db
 __pycache__
+thumbnails
