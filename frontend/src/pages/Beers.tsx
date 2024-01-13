@@ -2,6 +2,7 @@ import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import BeerForm from "../components/BeerForm";
 import BeerTable from "../components/BeerTable";
 import api, { Beer } from "../api";
+import Container from "react-bootstrap/Container";
 
 const Beers: React.FC = () => {
     const [beers, setBeers] = useState<Beer[]>([]);
@@ -82,15 +83,18 @@ const Beers: React.FC = () => {
     
 
   return (
-    <div>
+    <Container fluid="true">
+        <BeerTable beers={beers} onDelete={handleDeleteBeer}/>
+        <hr /> {/* Using Bootstrap divider class */}
+
+        <h2>Add New Beer</h2>
         <BeerForm 
         formData={formData} 
         handleInputChange={handleInputChange} 
         handleFormSubmit={handleFormSubmit}
         handleFileChange={handleFileChange}
         />
-        <BeerTable beers={beers} onDelete={handleDeleteBeer}/>
-    </div>
+    </Container>
     );
 };
 
