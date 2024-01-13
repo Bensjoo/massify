@@ -15,9 +15,10 @@ interface BeerFormProps {
     formData: BeerFormData;
     handleInputChange: (event: ChangeEvent<HTMLInputElement>) => void;
     handleFormSubmit: (event: FormEvent<HTMLFormElement>) => void;
+    handleFileChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
-const BeerForm: React.FC<BeerFormProps> = ({formData, handleInputChange, handleFormSubmit}) => {
+const BeerForm: React.FC<BeerFormProps> = ({formData, handleInputChange, handleFileChange, handleFormSubmit}) => {
     return(
     <Container>
         <Form onSubmit={handleFormSubmit}>
@@ -75,6 +76,10 @@ const BeerForm: React.FC<BeerFormProps> = ({formData, handleInputChange, handleF
                 value={formData.bolaget_number}
                 onChange={handleInputChange}
             />
+        </Form.Group>
+        <Form.Group className="mb-3">
+            <Form.Label>Thumbnail</Form.Label>
+            <Form.Control type="file" onChange={handleFileChange} />
         </Form.Group>
 
         <Button variant="primary" type="submit">

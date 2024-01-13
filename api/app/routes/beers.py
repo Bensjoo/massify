@@ -48,7 +48,7 @@ async def create_beer(
         db.commit()
         db.refresh(db_beer)
 
-        file_location = f"../thumbnails/{db_beer.id}.png"
+        file_location = f"static/thumbnails/{db_beer.id}.png"
         with open(file_location, "wb+") as file:
             contents = thumbnail.file.read()
             file.write(contents)

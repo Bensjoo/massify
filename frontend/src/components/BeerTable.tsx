@@ -20,6 +20,9 @@ const BeerTable: React.FC<BeerTableProps> = ({ beers, onDelete }) => (
     <tbody>
       {beers.map(beer => (
         <tr key={beer.id}>
+          <td className='justify-content-center align-items-center' style={{ width: '50px' }}>
+                {<img src={`http://localhost:8000/static/thumbnails/${beer.id}.png`} alt="Thumbnail" style={{ width: '50px' }} />}
+            </td>
           <td>{beer.name}</td>
           <td>{beer.abv.toFixed(1)}</td>
           <td>

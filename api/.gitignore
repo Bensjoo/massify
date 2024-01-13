@@ -40,3 +40,4 @@ dev.db*
 demo.db
 __pycache__
 thumbnails
+static

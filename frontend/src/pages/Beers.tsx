@@ -5,6 +5,8 @@ import api, { Beer } from "../api";
 
 const Beers: React.FC = () => {
     const [beers, setBeers] = useState<Beer[]>([]);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
     const [formData, setFormData] = useState({
         name: '',
         short_name: '',
@@ -35,9 +37,32 @@ const Beers: React.FC = () => {
         })
     }
 
+    const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files) {
+            setSelectedFile(event.target.files[0]);
+        }
+    };
+
     const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        await api.post('/beers/new/', formData);
+
+        // multipart form
+        const requestFormData = new FormData();
+        // Manually append each field from the state to the FormData object
+        requestFormData.append('name', formData.name);
+        requestFormData.append('short_name', formData.short_name);
+        requestFormData.append('brewery', formData.brewery);
+        requestFormData.append('bolaget_number', String(formData.bolaget_number)); // Convert number to string
+        requestFormData.append('abv', String(formData.abv)); // Convert number to string
+
+        if (selectedFile) {
+            requestFormData.append('thumbnail', selectedFile);
+        }
+
+        await api.post('/beers/new/', requestFormData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+
         fetchBeers();
         setFormData({
             name: '',
@@ -45,14 +70,16 @@ const Beers: React.FC = () => {
             brewery: '',
             bolaget_number: 0,
             abv: 5.0
-        })
-    }
+        });
+        setSelectedFile(null);
+    };
 
     const handleDeleteBeer = async(userId: number) => {
         await deleteBeer(userId)
         fetchBeers();
     }
 
+    
 
   return (
     <div>
@@ -60,6 +87,7 @@ const Beers: React.FC = () => {
         formData={formData} 
         handleInputChange={handleInputChange} 
         handleFormSubmit={handleFormSubmit}
+        handleFileChange={handleFileChange}
         />
         <BeerTable beers={beers} onDelete={handleDeleteBeer}/>
     </div>

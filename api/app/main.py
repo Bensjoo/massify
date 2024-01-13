@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from app.config import Config
 from app.routes.users import router as users_router
@@ -27,6 +28,9 @@ app.add_middleware(
     allow_methods=['*'],
     allow_headers=['*'],
 )
+
+# Mount thumbnails as static content folder
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 # Top level entrypoints
