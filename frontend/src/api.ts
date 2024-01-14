@@ -20,4 +20,12 @@ export interface Beer {
   bolaget_number: number;
   abv: number;
 }
+
+export interface Tasting {
+  id: number;
+  title: string;
+  started: string;
+  ended?: string; // Optional, ISO date string
+  participants?: Array<User>; // Assuming you have a User interface defined
+}
 export default api;

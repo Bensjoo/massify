@@ -29,14 +29,18 @@ class TastingModel(BaseModel):
 
 class TastingCreate(BaseModel):
     title: str
+    started: Optional[datetime] = None
 
 
-@tastings_router.post('/new/', response_model=TastingModel)
+@tastings_router.post('/', response_model=TastingModel)
 async def create_tasting(
         tasting: TastingCreate,
         db: Session = Depends(get_db)):
+    started_date = tasting.started if tasting.started else datetime.now()
+
     db_tasting = models.Tasting(
-        **tasting.model_dump(),
+        title=tasting.title,
+        started=started_date
     )
     db.add(db_tasting)
     db.commit()
@@ -44,6 +48,13 @@ async def create_tasting(
     # for us to return list of users?
     db.refresh(db_tasting)
     return db_tasting
+
+
+@tastings_router.delete('/{id}')
+async def delete_by_id(id: int, db: Session = Depends(get_db)):
+    db.query(models.Tasting).filter(models.Tasting.id == id).delete()
+    db.commit()
+    return {"message": f"deleted tasting with id: {id}"}
 
 
 @tastings_router.get('/', response_model=List[TastingModel])
